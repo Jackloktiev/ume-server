@@ -165,9 +165,12 @@ App.post("/login", function(req,res){
         }else{
             passport.authenticate("local")(req,res,function(){
                 const body = {userID:user._id, username:user.username} // not sure what is this, but done according to the article
-                const token = jwt.sign({user:body},"top secret");
+                const token = {
+                    token:jwt.sign({user:body},"top secret"),
+                    username: user.username
+                };
                 res.json({token});
-                console.log("user is authenticated sucesfully");
+                console.log(token);
             })
         }
     })
