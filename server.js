@@ -344,41 +344,62 @@ App.post("/addFoodItem", function(req,res){
 
 //-Service route - add several food items provided in MealsData array
 App.post("/addFoodItems", function(req,res){
+    var counter = 0;
     MealsData.map(item=>{
-    var itemID = item.id;
-    var itemCategory = item.category;
-    var itemRestaurant = item.restaurant;
-    var itemName = item.name;
-    var itemImageUrl = item.imageUrl;
-    var itemCalories = item.caloriesPer100g;
-    var itemFats = item.fatsPer100g;
-    var itemCarbs = item.carbsPer100g;
-    var itemProteins = item.proteinsPer100g;
-        
-    const foodItem = new Item ({
-        id: itemID,
-        category: itemCategory,
-        restaurant: itemRestaurant,
-        name: itemName,
-        imageUrl: itemImageUrl,
-        caloriesPer100g: itemCalories,
-        fatsPer100g: itemFats,
-        carbsPer100g: itemCarbs,
-        proteinsPer100g: itemProteins
-    })
-    foodItem.save(function(err){
-        if(err){
-            console.log(err);
-            res.send("Error on adding food item");
-        }else{
-            console.log("food item added sucesfully");
-            res.send("Food item added sucesfully!");
-        }
+        var itemID = item.id;
+        var itemCategory = item.category;
+        var itemRestaurant = item.restaurant;
+        var itemName = item.name;
+        var itemImageUrl = item.imageUrl;
+        var itemCalories = item.caloriesPer100g;
+        var itemFats = item.fatsPer100g;
+        var itemCarbs = item.carbsPer100g;
+        var itemProteins = item.proteinsPer100g;
+            
+        const foodItem = new Item ({
+            id: itemID,
+            category: itemCategory,
+            restaurant: itemRestaurant,
+            name: itemName,
+            imageUrl: itemImageUrl,
+            caloriesPer100g: itemCalories,
+            fatsPer100g: itemFats,
+            carbsPer100g: itemCarbs,
+            proteinsPer100g: itemProteins
+        })
+
+        foodItem.save(function(err){
+            if(err){
+                console.log("Error happened here " + err);
+            }else{
+                console.log(foodItem.name +  " added successfully");
+            }
+        });
     });
+    res.send("Items added to the database");
+});
 
-})
+//-Service route - add several restaurants provided in RestData array
+App.post("/addRestaurants", function(req,res){
+    RestData.map(item=>{
+        var restName = item.name;
+        var restLogo = item.logoUrl;
+            
+        const restaurant = new Restaurant ({
+            name: restName,
+            logoUrl: restLogo
+        })
 
-})
+        restaurant.save(function(err){
+            if(err){
+                console.log("Error happened here " + err);
+            }else{
+                console.log(restaurant.name +  " added successfully");
+            }
+        });
+    });
+    res.send("Restaurants added to the database");
+});
 
 
 
