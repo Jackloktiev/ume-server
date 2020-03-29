@@ -1,11 +1,9 @@
 const Express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const jwt = require("jsonwebtoken");
-
 
 const MealsData = require("./testContent");
 const RestData = require("./testRestaurants");
@@ -16,13 +14,7 @@ const RestData = require("./testRestaurants");
 const App = Express();
 App.use(bodyParser.urlencoded({extended:true}));
 App.use(Express.json());
-App.use(session({
-    secret:"Bla Bla Bla",
-    resave:false,
-    saveUninitialized:false
-}));
 App.use(passport.initialize()); // initialize passposrt
-//App.use(passport.session()); // this thing is responsible for creating sessions
 
 //---Set up Data Base---
 mongoose.connect("mongodb://localhost:27017/UmeDB2",{ useNewUrlParser: true,  useUnifiedTopology: true });
@@ -41,7 +33,8 @@ const userShema = new mongoose.Schema ({
     normCalories:Number,
     normFats:Number,
     normProteins:Number,
-    normCarbs:Number
+    normCarbs:Number,
+    consumptionId:Number
 });
 userShema.plugin(passportLocalMongoose);
 const User = mongoose.model("User", userShema);
@@ -79,9 +72,9 @@ App.get("/food",function(req,res){
     Item.find({},function(err,foundItems){
         if(err){
             console.log(err);
-            res.send(err);
+            res.status(409).send(err);
         }else{
-            res.send(foundItems);
+            res.status(200).send(foundItems);
         }
     });
 });
@@ -91,9 +84,9 @@ App.get("/restaurants",function(req,res){
     Restaurant.find({},function(err,foundItems){
         if(err){
             console.log(err);
-            res.send(err);
+            res.status(409).send(err);
         }else{
-            res.send(foundItems);
+            res.status(200).send(foundItems);
         }
     });
 });
@@ -105,6 +98,7 @@ App.get("/userData", function(req,res){
     User.findOne({username:username},function(err, foundUser){
         if(err){
             console.log(err);
+            res.status(409).send(err);
         }else{
             let now = new Date();
             let today = now.getMonth()+"-"+now.getDate()+"-"+now.getFullYear();
@@ -112,14 +106,22 @@ App.get("/userData", function(req,res){
             let totalFats = 0;
             let totalProteins = 0;
             let totalCarbs = 0;
-            foundUser.consumption.map((item)=>{
-                if(item.date === today){
-                    totalCalories = totalCalories + item.calories;
-                    totalProteins = totalProteins + item.proteins;
-                    totalFats = totalFats + item.fats;
-                    totalCarbs = totalCarbs + item.carbs;
-                }
-            })
+            if(foundUser.consumption){
+                foundUser.consumption.map((item)=>{
+                    if(item.date === today){
+                        totalCalories = totalCalories + item.calories;
+                        totalProteins = totalProteins + item.proteins;
+                        totalFats = totalFats + item.fats;
+                        totalCarbs = totalCarbs + item.carbs;
+                    }
+                })
+            }else{
+                totalCalories = 0;
+                totalProteins = 0;
+                totalFats = 0;
+                totalCarbs = 0;
+            }
+
             let userData = {
                 normCalories:foundUser.normCalories,
                 normFats:foundUser.normFats,
@@ -128,9 +130,15 @@ App.get("/userData", function(req,res){
                 totalCalories:totalCalories,
                 totalProteins:totalProteins,
                 totalFats:totalFats,
-                totalCarbs:totalCarbs        
+                totalCarbs:totalCarbs,
+                name:foundUser.name,
+                gender:foundUser.gender,
+                age:foundUser.age,
+                height:foundUser.height,
+                weight:foundUser.weight,
+                levelOfActivity:foundUser.lvlOfActivity     
             }
-            res.send(userData);
+            res.status(200).send(userData);
         }
     })
     
@@ -138,16 +146,16 @@ App.get("/userData", function(req,res){
 
 //--register a user--
 App.post("/register", function(req,res){
-    console.log(req.body.username);
-    console.log(req.body.password);
     User.register({username:req.body.username},req.body.password, function(err,user){
         if(err){
-            console.log(err);
-            res.send(err);
+            if(err.name === "UserExistsError"){
+                res.status(409).send("User exists");
+            }else{
+                res.status(500).send("Unknown database error");
+            }
         }else{
             passport.authenticate("local")(req,res,function(){
-                console.log("user created");
-                res.send("user created ok");
+                res.status(200).send("User created");
             })
         }
     })
@@ -162,6 +170,7 @@ App.post("/login", function(req,res){
     req.login(user,function(err){
         if(err){
             console.log(err);
+            res.status(409).send(err);
         }else{
             passport.authenticate("local")(req,res,function(){
                 const body = {userID:user._id, username:user.username} // not sure what is this, but done according to the article
@@ -169,14 +178,13 @@ App.post("/login", function(req,res){
                     token:jwt.sign({user:body},"top secret"),
                     username: user.username
                 };
-                res.json({token});
-                console.log(token);
+                res.status(200).json({token});
             })
         }
     })
 })
 
-App.post("/consumed", function(req,res){
+App.post("/consumed", async function(req,res){
     //Calculate consumption of nutrients depending on amount of food
     let cal = req.body.calories/100*req.body.quantity;
     let prot = req.body.proteins/100*req.body.quantity;
@@ -187,7 +195,34 @@ App.post("/consumed", function(req,res){
     const decoded = jwt.verify(token,"top secret");
     let username = decoded.user.username;
 
+    var successIndicator;
+    //getting latest consumption id
+    var consumptionId;
+    await User.findOne({username:username},function(err, foundUser){
+        if(err){
+            console.log(err);
+            successIndicator = false;
+        }else{
+            console.log(foundUser.consumptionId);
+            consumptionId = foundUser.consumptionId;
+            successIndicator = true;
+        }
+    });
+    
+    var updatedConsumptionId = (consumptionId+1)||0;
+    await User.updateOne({username:username},{consumptionId:updatedConsumptionId},function(err){
+        if(err){
+            console.log(err); 
+            successIndicator = false;
+        }else{
+            successIndicator = true;
+        }
+    });
+
+
+
     var meal = {
+        mealId:updatedConsumptionId,
         date:req.body.date,
         calories:cal,
         fats:fat,
@@ -196,22 +231,27 @@ App.post("/consumed", function(req,res){
         amount:req.body.quantity,
         name: req.body.name
     }
-
-    //console.log(meal);
+    
+    //adding user data to consumption array
     User.updateOne({username:username},{$push:{consumption:meal}},function(err){
         if(err){
-            console.log(err);  //rethink
-            res.send("Ooops!");  //rethink
+            console.log(err);
+            successIndicator = false;
         }else{
-            console.log("meal has been added") //rethink
-            res.send("meal added")  //rethink
+            successIndicator = true;
         }
     });
+
+    if(successIndicator){
+        res.status(200).send("Meal added and consumptionId updated");
+    }else{
+        res.status(409).send("Something went wrong");
+    }
+
+
 })
 //--set user data/profile
 App.post("/setUserData", function(req,res){
-    console.log(req.body);
-
 
     function proteinNorm (weight,activity){
         var norm = 0;
@@ -296,15 +336,135 @@ App.post("/setUserData", function(req,res){
         },
         function(err){
             if(!err){
-                res.send("user info updated");
+                res.status(200).send("user info updated");
             }else{
-                res.send(err);
+                res.status(409).send(err);
             }
         }
     );
 
 });
 
+//--get consumption history data--
+App.get("/history", function(req,res){
+    const token = req.query.token;
+    const decoded = jwt.verify(token,"top secret");
+    let username = decoded.user.username;
+    User.findOne({username:username},function(err, foundUser){
+        if(err){
+            console.log(err);
+            res.status(409).send(err);
+        }else{
+            var consumption = foundUser.consumption;
+            if(consumption){
+                res.status(200).send(consumption);
+            }else{
+                res.status(409).send("no consumption data");
+            }
+        }
+    })
+});
+
+//update consumption history data--
+App.post("/historyChange", async function(req,res){
+    let cal = req.body.calories;
+    let prot = req.body.proteins;
+    let carbs = req.body.carbs;
+    let fat = req.body.fats;
+    let id = req.body.mealId;
+    let date = req.body.date;
+    let amount = req.body.amount;
+    let name = req.body.name;
+
+    const token = req.query.token;
+    const decoded = jwt.verify(token,"top secret");
+    let username = decoded.user.username;
+
+    var meal = {
+        calories:cal,
+        proteins:prot,
+        carbs:carbs,
+        fats:fat,
+        date:date,
+        mealId:id,
+        amount:amount,
+        name:name
+    }
+    
+    //extract consumption array from the User
+    let consumption;
+    await User.findOne({username:username},function(err, foundUser){
+        if(err){
+            console.log(err);
+        }else{
+            consumption = foundUser.consumption;
+        }
+    });
+
+    //edit consumption array with new meals object (delete old and add new)
+    if(id){
+        let mealIndex = consumption.findIndex(function(item){
+            return item.mealId==id;
+        });
+        consumption.splice(mealIndex,1,meal);
+    }else{
+        console.log("");
+    }
+
+    //adding user data to consumption array
+    User.updateOne({username:username},{consumption:consumption},function(err){
+        if(err){
+            console.log(err);
+            res.status(409).send("something went wrong");
+        }else{
+            res.status(200).send("Meal has been updated");
+        }
+    });
+
+
+
+});
+
+//delete consumption history data--
+App.post("/historyDelete", async function(req,res){
+
+    let id = req.body.mealId;
+
+    const token = req.query.token;
+    const decoded = jwt.verify(token,"top secret");
+    let username = decoded.user.username;
+    
+    //extract consumption array from the User
+    let consumption;
+    await User.findOne({username:username},function(err, foundUser){
+        if(err){
+            console.log(err);
+        }else{
+            consumption = foundUser.consumption;
+        }
+    });
+
+    //edit consumption array with new meals object (delete old and add new)
+    if(id!=undefined){
+        let mealIndex = consumption.findIndex(function(item){
+            return item.mealId==id;
+        });
+        consumption.splice(mealIndex,1);
+    }else{
+        console.log("the meal does not exist");
+    }
+
+
+    //adding user data to consumption array
+    User.updateOne({username:username},{consumption:consumption},function(err){
+        if(err){
+            console.log(err);
+            res.status(409).send("something went wrong");
+        }else{
+            res.status(200).send("done");
+        }
+    });
+});
 
 
 
@@ -336,7 +496,6 @@ App.post("/addFoodItem", function(req,res){
             console.log(err);
             res.send("Error on adding food item");
         }else{
-            console.log("food item added sucesfully");
             res.send("Food item added sucesfully!");
         }
     });
@@ -344,7 +503,6 @@ App.post("/addFoodItem", function(req,res){
 
 //-Service route - add several food items provided in MealsData array
 App.post("/addFoodItems", function(req,res){
-    var counter = 0;
     MealsData.map(item=>{
         var itemID = item.id;
         var itemCategory = item.category;
