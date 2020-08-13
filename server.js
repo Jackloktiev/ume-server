@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const jwt = require("jsonwebtoken");
+const cors = require('cors');
+const path = require('path');
 
 const MealsData = require("./testContent");
 const RestData = require("./testRestaurants");
@@ -15,6 +17,8 @@ const App = Express();
 App.use(bodyParser.urlencoded({extended:true}));
 App.use(Express.json());
 App.use(passport.initialize()); // initialize passposrt
+App.use(cors());
+
 
 //---Set up Data Base---
 mongoose.connect("mongodb://localhost:27017/UmeDB2",{ useNewUrlParser: true,  useUnifiedTopology: true });
@@ -67,6 +71,7 @@ const Restaurant = mongoose.model("Restaurant",restaurantShema);
 
 
 //---Define routes---
+
 //--get entire collection of food--
 App.get("/food",function(req,res){
     Item.find({},function(err,foundItems){
@@ -560,5 +565,15 @@ App.post("/addRestaurants", function(req,res){
 });
 
 
+//Serve static assets if in production
+if(process.env.NODE_ENV==="production"){
+    App.use(Express.static("umev2.0/build"))
+    App.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname,"umev2.0","build","index.html"))
+    });
+}
 
-App.listen(8000, ()=> console.log("Server is running on port 8000"));
+const port = process.env.PORT || 8000;
+App.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+});
