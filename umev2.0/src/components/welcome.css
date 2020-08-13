@@ -1,0 +1,25 @@
+.Welcome{
+    width:90%;
+    margin: 10px auto;
+    background-color: #4d80e4;
+    color:#dff6f0;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 3px 2px 4px #0c376b;
+    font-size: 0.9rem;
+}
+
+.Welcome-text{
+    text-align: justify;
+}
+
+.Welcome-btn{
+    width: 20%;
+    height: 40px;
+    background-color: #dff6f0;
+    color: #4d80e4;
+    margin: 10px 30px;
+    padding: 5px;
+    display: inline-block;
+
+}

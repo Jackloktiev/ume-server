@@ -1,0 +1,32 @@
+.historyTile{
+    font-size: .7em;
+    margin: 5px 0 0 0;
+    background-color: #4d80e4;
+    width: 100%;
+    color: white;
+    border-radius: 7px;
+    padding: 1%;
+  }
+
+.tile-img{
+  width: 150px;
+  height: auto;
+  margin:7px;
+  float: left;
+}
+
+td {
+  padding: 10px;
+}
+
+table {
+  font-size: 16px;
+}
+
+.historyBtn {
+  width: 10%;
+  background-color: #dff6f0;
+  color: #4d80e4;
+  margin-left: 1%;
+  display: inline-block;
+}

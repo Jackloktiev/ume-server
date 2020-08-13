@@ -1,0 +1,20 @@
+.Warning{
+    width: 100%;
+    background-color: coral;
+    padding: 2%;
+    text-align: center;
+    z-index: 100;
+
+
+
+}
+
+.Warning_btn{
+    display: block;
+    width: 50 px;
+    height: 25px;
+    padding: 2px;
+    text-align: center;
+    background-color: crimson;
+    border: 1px solid black;
+}

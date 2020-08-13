@@ -1,0 +1,21 @@
+.Backdrop{
+    width: 100%;
+    height: 100%;
+    position:fixed;
+    z-index: 100;
+    left:0;
+    top:0;
+    background-color: rgba(0,0,0,0.5);
+    color:white;
+}
+.tileForm {
+    width:70%;
+    background-color: #2e279d;
+    margin: auto;
+    padding: 20px;
+}
+.tileForm-img {
+    width: 150px;
+    float:left;
+    margin-right: 20px;
+}

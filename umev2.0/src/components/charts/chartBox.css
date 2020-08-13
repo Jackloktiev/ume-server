@@ -1,0 +1,8 @@
+.ChartBox{
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: #4d80e4;
+}

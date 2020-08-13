@@ -1,0 +1,9 @@
+.tileBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: #4d80e4;
+    margin: 5px 0;
+}

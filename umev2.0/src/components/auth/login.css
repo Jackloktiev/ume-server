@@ -1,0 +1,31 @@
+.LoginDiv{
+    margin: 50px auto;
+    border: 1px solid black;
+    width:80%;
+    padding:1%;
+    background-color: #4d80e4;
+    color:#dff6f0;
+    text-align: center;
+}
+
+.loginInput{
+    display:block;
+    margin: 0% auto 2% auto;
+    background-color: #dff6f0;
+    width: 76%;
+
+}
+
+.loginBtn{
+    width: 20%;
+    background-color: #dff6f0;
+    color: #4d80e4;
+    margin: 10px 30px;
+    padding: 5px;
+    display: inline-block;
+    
+}
+
+.Error{
+    color: red;
+}

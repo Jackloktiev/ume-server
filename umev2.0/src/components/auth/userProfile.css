@@ -1,0 +1,27 @@
+.setUserData {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+.caption {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+
+.label{
+    margin-right: 1rem;
+}
+
+.profileInput{
+    margin: 0% auto 2% auto;
+    background-color: #dff6f0;
+}
+
+.profileBtn{
+    width: 20%;
+    background-color: #dff6f0;
+    color: #4d80e4;
+    margin: 10px 30px;
+    padding: 5px;
+    display: inline-block;
+}

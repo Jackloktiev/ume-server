@@ -1,0 +1,14 @@
+.menu {
+    background-color: #4d80e4;
+    width: 100%;
+    margin: 5px 0;
+    color: white;
+    text-align: left;
+}
+.link {
+    color: white;
+    padding: 3px;
+    font-size: 14px;
+    margin: 10px;
+    text-decoration: none;
+}
