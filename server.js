@@ -21,7 +21,7 @@ App.use(cors());
 
 
 //---Set up Data Base---
-mongoose.connect("mongodb://localhost:27017/UmeDB2",{ useNewUrlParser: true,  useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://Jack_Lo:Scarboro2581347@ume.b4s1t.mongodb.net/UmeDB2?retryWrites=true&w=majority",{ useNewUrlParser: true,  useUnifiedTopology: true });
 
 //--Define User collection--
 const userShema = new mongoose.Schema ({
