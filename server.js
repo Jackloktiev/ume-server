@@ -9,6 +9,7 @@ const path = require('path');
 
 const MealsData = require("./testContent");
 const RestData = require("./testRestaurants");
+const bigData = require("./data.json");
 
 
 //Ctrs+Shift+[ to collapse the code and Ctrl+Shift+] to unfold
@@ -60,7 +61,8 @@ const itemShema = new mongoose.Schema ({
     caloriesPer100g:Number,
     fatsPer100g:Number,
     carbsPer100g:Number,
-    proteinsPer100g:Number
+    proteinsPer100g:Number,
+    serving:String
 });
 const Item = mongoose.model("Item",itemShema);
 
@@ -193,10 +195,10 @@ App.post("/login", function(req,res){
 
 App.post("/consumed", async function(req,res){
     //Calculate consumption of nutrients depending on amount of food
-    let cal = req.body.calories/100*req.body.quantity;
-    let prot = req.body.proteins/100*req.body.quantity;
-    let carbs = req.body.carbs/100*req.body.quantity;
-    let fat = req.body.fats/100*req.body.quantity;
+    let cal = req.body.calories*req.body.quantity;
+    let prot = req.body.proteins*req.body.quantity;
+    let carbs = req.body.carbs*req.body.quantity;
+    let fat = req.body.fats*req.body.quantity;
 
     const token = req.body.token;
     const decoded = jwt.verify(token,"top secret");
@@ -508,18 +510,20 @@ App.post("/addFoodItem", function(req,res){
     });
 })
 
+
 //-Service route - add several food items provided in MealsData array
 App.post("/addFoodItems", function(req,res){
-    MealsData.map(item=>{
-        var itemID = item.id;
+    bigData.map(item=>{
+        var itemID = Math.floor((Math.random() * 10000) + 1);
         var itemCategory = item.category;
         var itemRestaurant = item.restaurant;
         var itemName = item.name;
         var itemImageUrl = item.imageUrl;
-        var itemCalories = item.caloriesPer100g;
-        var itemFats = item.fatsPer100g;
-        var itemCarbs = item.carbsPer100g;
-        var itemProteins = item.proteinsPer100g;
+        var itemCalories = item.Calories;
+        var itemFats = item.Fat;
+        var itemCarbs = item.Carbs;
+        var itemProteins = item.Prot;
+        var itemServing = item.serving;
             
         const foodItem = new Item ({
             id: itemID,
@@ -530,7 +534,8 @@ App.post("/addFoodItems", function(req,res){
             caloriesPer100g: itemCalories,
             fatsPer100g: itemFats,
             carbsPer100g: itemCarbs,
-            proteinsPer100g: itemProteins
+            proteinsPer100g: itemProteins,
+            serving:itemServing
         })
 
         foodItem.save(function(err){

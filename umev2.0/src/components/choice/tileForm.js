@@ -68,7 +68,7 @@ function TileForm(props){
                     </div>
                 </div>
                 <form action="/consumed" method="POST" className="tileForm">
-                        <p>Amount of grams consumed:</p>
+                        <p>Amount consumed:</p>
                         <input type="number" name="quantity" value = {quantity} onChange = {quantityChangeHandler} />
                         <input type="button" className="button" onClick = {submitClickHandler} value = "Submit" />
                         <input type="button" className="button" onClick = {cancelClickHandler} value = "Cancel" />
