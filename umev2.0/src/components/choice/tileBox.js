@@ -41,7 +41,7 @@ function ChoiceBox(props) {
         <div>
             <div className = "tileBox">
             {props.data.map(item=><Tile
-                key = {item.id}
+                key = {item._id}
                 itemId = {item.id}
                 name={item.name}
                 imgUrl={item.imageUrl}

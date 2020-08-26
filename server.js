@@ -9,7 +9,7 @@ const path = require('path');
 
 const MealsData = require("./testContent");
 const RestData = require("./testRestaurants");
-const bigData = require("./data.json");
+const bigData = require("./starbucksData.json");
 
 
 //Ctrs+Shift+[ to collapse the code and Ctrl+Shift+] to unfold
@@ -194,6 +194,12 @@ App.post("/login", function(req,res){
 })
 
 App.post("/consumed", async function(req,res){
+    console.log("Consumption data received: ");
+    console.log("Calories: "+req.body.calories);
+    console.log("Proteins: "+req.body.proteins);
+    console.log("Carbs: "+req.body.carbs);
+    console.log("Fats: "+req.body.fats);
+    console.log("Quantity: "+req.body.quantity);
     //Calculate consumption of nutrients depending on amount of food
     let cal = req.body.calories*req.body.quantity;
     let prot = req.body.proteins*req.body.quantity;
@@ -240,6 +246,7 @@ App.post("/consumed", async function(req,res){
         amount:req.body.quantity,
         name: req.body.name
     }
+    console.log(meal);
     
     //adding user data to consumption array
     User.updateOne({username:username},{$push:{consumption:meal}},function(err){

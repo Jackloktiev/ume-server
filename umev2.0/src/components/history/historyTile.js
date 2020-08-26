@@ -38,7 +38,7 @@ function HistoryTile(props) {
                                 <th>{props.data.date}</th>
                                 <td></td>
                                 <th>Quantity consumed:</th>
-                                <th>{props.data.amount} g</th>
+                                <th>{props.data.amount}</th>
                             </tr>
                         </tbody>
                     </table>

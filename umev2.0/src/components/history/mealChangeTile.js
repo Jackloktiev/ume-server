@@ -66,7 +66,7 @@ function MealChange(props) {
                         <th>{props.data.date}</th>
                         <td></td>
                         <th>Quantity consumed:</th>
-                        <th><input type="number" name="quantity" value = {quantity} onChange = {quantityChangeHandler}  /> g</th>
+                        <th><input type="number" name="quantity" value = {quantity} onChange = {quantityChangeHandler}  /></th>
                     </tr>
                 </tbody>
             </table>

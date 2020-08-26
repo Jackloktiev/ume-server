@@ -7,7 +7,6 @@ import MealChange from "./mealChangeTile";
 
 const History = (props) => {
     const [meals, setMeals] = useState();
-    const [deleteId, setDeleteId] = useState();
     const [changeId, setChangeId] = useState();
     const [pageUpdate, setPageUpdate] = useState(0);
     let [show, setShow] = useState(false);
@@ -30,9 +29,11 @@ const History = (props) => {
  
     },[pageUpdate]);
 
-    //delete a particular meal
-    useEffect(()=>{
-        const data = {mealId:deleteId};
+
+    const deleteClickHandler = (mealId)=>{
+        console.log("Delete meal was pressed. Meal ID is "+mealId);
+
+        const data = {mealId:mealId};
         fetch("/historyDelete?token=" + window.sessionStorage.token,{
             method:"POST",
             headers:{
@@ -43,14 +44,11 @@ const History = (props) => {
             return response.text();
         }).then(result=>{
             setPageUpdate(pageUpdate+1);
-        }).then(()=>{props.setChartUpdate(Math.random())})
-    },[deleteId]);
-
-    const deleteClickHandler = (mealId)=>{
-        setDeleteId(mealId);
+        }).then(()=>{props.setChartUpdate(Math.random())});
     }
 
     const changeClickHandler = (mealId)=>{
+        console.log("Change meal was pressed. Meal ID is "+mealId);
         setChangeId(mealId);
     }
     
