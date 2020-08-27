@@ -116,8 +116,13 @@ App.get("/userData", function(req,res){
             let totalProteins = 0;
             let totalCarbs = 0;
             if(foundUser.consumption){
+                                                console.log("server got consumption array of found user");
+                                                console.log(foundUser.consumption);
                 foundUser.consumption.map((item)=>{
                     if(item.date === today){
+                                                console.log("server got to items");
+                                                console.log(item.date);
+                                                console.log(item.calories);
                         totalCalories = totalCalories + item.calories;
                         totalProteins = totalProteins + item.proteins;
                         totalFats = totalFats + item.fats;
