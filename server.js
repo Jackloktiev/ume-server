@@ -110,19 +110,15 @@ App.get("/userData", function(req,res){
             res.status(409).send(err);
         }else{
             let now = new Date();
-            let today = now.getMonth()+"-"+now.getDate()+"-"+now.getFullYear();
+            //let today = now.getMonth()+"-"+now.getDate()+"-"+now.getFullYear();
+            let today = now.toISOString().substring(0,10);
             let totalCalories = 0;
             let totalFats = 0;
             let totalProteins = 0;
             let totalCarbs = 0;
             if(foundUser.consumption){
-                                                console.log("server got consumption array of found user");
-                                                console.log(foundUser.consumption);
                 foundUser.consumption.map((item)=>{
                     if(item.date === today){
-                                                console.log("server got to items");
-                                                console.log(item.date);
-                                                console.log(item.calories);
                         totalCalories = totalCalories + item.calories;
                         totalProteins = totalProteins + item.proteins;
                         totalFats = totalFats + item.fats;
@@ -199,12 +195,6 @@ App.post("/login", function(req,res){
 })
 
 App.post("/consumed", async function(req,res){
-    console.log("Consumption data received: ");
-    console.log("Calories: "+req.body.calories);
-    console.log("Proteins: "+req.body.proteins);
-    console.log("Carbs: "+req.body.carbs);
-    console.log("Fats: "+req.body.fats);
-    console.log("Quantity: "+req.body.quantity);
     //Calculate consumption of nutrients depending on amount of food
     let cal = req.body.calories*req.body.quantity;
     let prot = req.body.proteins*req.body.quantity;
@@ -216,60 +206,54 @@ App.post("/consumed", async function(req,res){
     let username = decoded.user.username;
 
     var successIndicator;
+
     //getting latest consumption id
     var consumptionId;
-    await User.findOne({username:username},function(err, foundUser){
+    User.findOne({username:username},function(err, foundUser){
         if(err){
             console.log(err);
             successIndicator = false;
         }else{
-            console.log(foundUser.consumptionId);
             consumptionId = foundUser.consumptionId;
             successIndicator = true;
+
+            var updatedConsumptionId = (consumptionId+1)||0;
+            User.updateOne({username:username},{consumptionId:updatedConsumptionId},function(err){
+                if(err){
+                    console.log(err); 
+                    successIndicator = false;
+                }else{
+                    successIndicator = true;
+                }
+            });
+
+            var meal = {
+                mealId:updatedConsumptionId,
+                date:req.body.date,
+                calories:cal,
+                fats:fat,
+                carbs:carbs,
+                proteins:prot,
+                amount:req.body.quantity,
+                name: req.body.name
+            }
+            
+            //adding user data to consumption array
+            User.updateOne({username:username},{$push:{consumption:meal}},function(err){
+                if(err){
+                    console.log(err);
+                }else{
+                    successIndicator = true;
+
+                    if(successIndicator){
+                        res.status(200).send("Meal added and consumptionId updated");
+                    }else{
+                        res.status(409).send("Something went wrong");
+                    }
+                }
+            });
         }
     });
-    
-    var updatedConsumptionId = (consumptionId+1)||0;
-    await User.updateOne({username:username},{consumptionId:updatedConsumptionId},function(err){
-        if(err){
-            console.log(err); 
-            successIndicator = false;
-        }else{
-            successIndicator = true;
-        }
-    });
-
-
-
-    var meal = {
-        mealId:updatedConsumptionId,
-        date:req.body.date,
-        calories:cal,
-        fats:fat,
-        carbs:carbs,
-        proteins:prot,
-        amount:req.body.quantity,
-        name: req.body.name
-    }
-    console.log(meal);
-    
-    //adding user data to consumption array
-    User.updateOne({username:username},{$push:{consumption:meal}},function(err){
-        if(err){
-            console.log(err);
-            successIndicator = false;
-        }else{
-            successIndicator = true;
-        }
-    });
-
-    if(successIndicator){
-        res.status(200).send("Meal added and consumptionId updated");
-    }else{
-        res.status(409).send("Something went wrong");
-    }
-
-
 })
 //--set user data/profile
 App.post("/setUserData", function(req,res){
@@ -414,33 +398,37 @@ App.post("/historyChange", async function(req,res){
     
     //extract consumption array from the User
     let consumption;
-    await User.findOne({username:username},function(err, foundUser){
+    User.findOne({username:username},function(err, foundUser){
         if(err){
             console.log(err);
         }else{
             consumption = foundUser.consumption;
-        }
+
+            //edit consumption array with new meals object (delete old and add new)
+            if(id){
+                let mealIndex = consumption.findIndex(function(item){
+                    return item.mealId==id;
+                });
+                consumption.splice(mealIndex,1,meal);
+            }else{
+                console.log("");
+            };
+
+            //adding user data to consumption array
+            User.updateOne({username:username},{consumption:consumption},function(err){
+                if(err){
+                    console.log(err);
+                    res.status(409).send("something went wrong");
+                }else{
+                    res.status(200).send("Meal has been updated");
+                }
+            }); 
+        };
     });
 
-    //edit consumption array with new meals object (delete old and add new)
-    if(id){
-        let mealIndex = consumption.findIndex(function(item){
-            return item.mealId==id;
-        });
-        consumption.splice(mealIndex,1,meal);
-    }else{
-        console.log("");
-    }
 
-    //adding user data to consumption array
-    User.updateOne({username:username},{consumption:consumption},function(err){
-        if(err){
-            console.log(err);
-            res.status(409).send("something went wrong");
-        }else{
-            res.status(200).send("Meal has been updated");
-        }
-    });
+
+    
 
 
 
@@ -454,35 +442,36 @@ App.post("/historyDelete", async function(req,res){
     const token = req.query.token;
     const decoded = jwt.verify(token,"top secret");
     let username = decoded.user.username;
+    console.log("Username for delete item is "+username);
+    console.log("Id for delete item is "+id);
     
     //extract consumption array from the User
     let consumption;
-    await User.findOne({username:username},function(err, foundUser){
+    User.findOne({username:username},function(err, foundUser){
         if(err){
             console.log(err);
         }else{
             consumption = foundUser.consumption;
-        }
-    });
 
-    //edit consumption array with new meals object (delete old and add new)
-    if(id!=undefined){
-        let mealIndex = consumption.findIndex(function(item){
-            return item.mealId==id;
-        });
-        consumption.splice(mealIndex,1);
-    }else{
-        console.log("the meal does not exist");
-    }
+            if(id!=undefined){
+                let mealIndex = consumption.findIndex(function(item){
+                    return item.mealId==id;
+                });
+                consumption.splice(mealIndex,1);
+            }else{
+                console.log("the meal does not exist");
+            }
+            
+            //adding user data to consumption array
+            User.updateOne({username:username},{consumption:consumption},function(err){
+                if(err){
+                    console.log(err);
+                    res.status(409).send("something went wrong");
+                }else{
+                    res.status(200).send("done");
+                }
+            });
 
-
-    //adding user data to consumption array
-    User.updateOne({username:username},{consumption:consumption},function(err){
-        if(err){
-            console.log(err);
-            res.status(409).send("something went wrong");
-        }else{
-            res.status(200).send("done");
         }
     });
 });

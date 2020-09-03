@@ -3,8 +3,6 @@ import { VictoryBar, VictoryChart, VictoryAxis, VictoryLine, VictoryLabel } from
 import "./chart.css";
 
 function Chart(props) {
-    console.log("Props data from Chart component:");
-    console.log(props);
     const norm =
         [
             { x: 1, y: props.norm },

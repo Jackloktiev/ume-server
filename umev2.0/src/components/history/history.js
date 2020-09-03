@@ -31,7 +31,6 @@ const History = (props) => {
 
 
     const deleteClickHandler = (mealId)=>{
-        console.log("Delete meal was pressed. Meal ID is "+mealId);
 
         const data = {mealId:mealId};
         fetch("/historyDelete?token=" + window.sessionStorage.token,{
@@ -44,11 +43,11 @@ const History = (props) => {
             return response.text();
         }).then(result=>{
             setPageUpdate(pageUpdate+1);
+            console.log("New value of page update " + pageUpdate);
         }).then(()=>{props.setChartUpdate(Math.random())});
     }
 
     const changeClickHandler = (mealId)=>{
-        console.log("Change meal was pressed. Meal ID is "+mealId);
         setChangeId(mealId);
     }
     

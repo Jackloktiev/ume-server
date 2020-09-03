@@ -3,8 +3,6 @@ import Chart from "./chart";
 import "./chartBox.css";
 
 function ChartBox(props) {
-    console.log("Props data from ChartBox component:");
-    console.log(props.userData);
     return(
         <div className = "ChartBox">
             <Chart norm = {props.userData.normCarbs} consumption = {props.userData.totalCarbs} nutrient = "carbs" />

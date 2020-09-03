@@ -37,6 +37,7 @@ function MealChange(props) {
         }).then(result=>{ props.setPageUpdate(props.pageUpdate + 1);
         }).then(props.setChartUpdate(Math.random()))
         props.setShow(false);
+        setQuantity("");
     }
 
     let ChangeForm = "";

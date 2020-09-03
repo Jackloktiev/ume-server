@@ -4,7 +4,8 @@ import "./tileForm.css";
 function TileForm(props){
     const [quantity, setQuantity] = useState("");
     const Now = new Date();
-    const currDate = Now.getMonth() + "-" + Now.getDate() + "-" + Now.getFullYear(); //construct the data
+    //const currDate = Now.getMonth() + "-" + Now.getDate() + "-" + Now.getFullYear(); //construct the date
+    const currDate = Now.toISOString().substring(0,10); //construct the date
     const title = props.data.name.charAt(0).toUpperCase() + props.data.name.slice(1);//capitalize the name of the food item
     
     const quantityChangeHandler = (event)=>{
