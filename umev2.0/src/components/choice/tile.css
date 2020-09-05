@@ -1,24 +1,29 @@
 .tile{
-    font-size: 0.5em;
-    margin: 5px;
-    background-color: #2e279d;
-    box-shadow: 3px 2px 4px white;
-    width: 100%;
-    color: white;
-    border-radius: 7px;
-  }
+  min-width: 49.5%;
+}
 
-  .tile-img{
-    width: 150px;
-    height: auto;
-    margin:7px;
-    float: left;
-  }
+.tile:last-child{
+  margin-bottom: 4.55rem;
+}
+.tile-img{
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 150px;
+}
 
-  td {
-    padding: 10px;
-  }
+.tile-image-div{
+  width: 25%;
+}
 
-  table {
-    font-size: 16px;
+.tile-table{
+  width: 75%;
+  margin-top: 7px;
+  color: #ffffff;
+  font: inherit;
+}
+
+@media only screen and (max-width: 1360px) {
+  .tile-image-div{
+    width: 15%;
   }
+}

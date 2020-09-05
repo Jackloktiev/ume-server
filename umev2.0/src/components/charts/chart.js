@@ -20,9 +20,9 @@ function Chart(props) {
 
     const style = {
         textColor:"white",
-        backgroundCol:"#2e279d",
+        backgroundCol:"#333333",
         lineColor:"firebrick",
-        barColor:"#dff6f0"
+        barColor:"#5BC0DE"
     }
 
     return (

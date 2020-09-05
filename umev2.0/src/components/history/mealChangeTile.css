@@ -19,3 +19,8 @@
     float:left;
     margin-right: 20px;
 }
+
+
+.flex-col{
+    flex-direction: column;
+}

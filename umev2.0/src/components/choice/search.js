@@ -1,4 +1,5 @@
 import React from 'react';
+import 'bootswatch/dist/yeti/bootstrap.min.css';
 import "./search.css";
 
 function Search (props){
@@ -6,7 +7,7 @@ function Search (props){
         <input 
         type = "search"
         placeholder = "Search for item..."
-        className = "Search"
+        className = "form-control mt-1"
         onChange = {props.changeHandler}
          />
 )}

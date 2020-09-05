@@ -85,7 +85,7 @@ function ChoiceBox(props) {
 
 
     return (
-        <div className="choiceBox">
+        <div className="choiceBox mt-1">
             <RestPicker data={listOfRestaurants} clickHandler={restaurantPickerHandler} />
             <Search changeHandler={SearchHandler} />
             {data && <TileBox data={data} token = {props.token} setChartUpdate = {props.setChartUpdate} />}

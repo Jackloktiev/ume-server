@@ -13,11 +13,11 @@ function HistoryTile(props) {
     }
     const title = props.data.name.charAt(0).toUpperCase() + props.data.name.slice(1);
     return (
-        <div className="historyTile" >
-            <div className="tileList">
+        <div className="card text-white bg-primary mt-1 tile" >
+            <h3 className="card-header">{title}</h3>
+            <div className = "card-body">
                 <div>
-                    <h3>{title}</h3>
-                    <table>
+                    <table className="table table-hover tile-table">
                         <tbody>
                             <tr>
                                 <th>Calories total:</th>
@@ -43,8 +43,8 @@ function HistoryTile(props) {
                         </tbody>
                     </table>
                 </div>
-                <button className="historyBtn" onClick = {changeClickHandler}>Change</button>
-                <button className="historyBtn" onClick = {deleteClickHandler}>Delete</button>
+                <button className="btn btn-primary" onClick = {changeClickHandler}>Change</button>
+                <button className="btn btn-primary ml-3" onClick = {deleteClickHandler}>Delete</button>
 
             </div>
         </div>

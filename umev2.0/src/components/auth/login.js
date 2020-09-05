@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import 'bootswatch/dist/yeti/bootstrap.min.css';
 import "./login.css";
 import { withRouter } from 'react-router-dom';
 
@@ -67,17 +68,19 @@ function Login(props) {
 
         <div>
 
-            <div className="LoginDiv">
+            <div className="container mt-3">
                 <form action="/login" method="POST" >
-                    <h3>Please sign in</h3>
-                    <label>User name</label>
-                    <input type="text" placeholder="User name" className="loginInput" name="username" onChange = {userNameChangeHandler} value = {userName} ></input>
-                    <label>Password</label>
-                    <input type="password" placeholder="Password" className="loginInput" name="password" onChange = {passwordChangeHandler} value = {password}  ></input>
-                    {errorMessage}
-                    <button type="submit" className="loginBtn" onClick={loginClickHandler}>Sign in</button>
+                    <fieldset>
+                        <legend>Please sign in</legend>
+                        <label className="col-form-label">User name</label>
+                        <input type="text" placeholder="User name" className="form-control" name="username" onChange = {userNameChangeHandler} value = {userName} ></input>
+                        <label className="col-form-label">Password</label>
+                        <input type="password" placeholder="Password" className="form-control" name="password" onChange = {passwordChangeHandler} value = {password}  ></input>
+                        {errorMessage}
+                        <button type="submit" className="btn btn-primary mt-3 mr-3" onClick={loginClickHandler}>Sign in</button>
 
-                    <button className="loginBtn" onClick = {registerClickHandler}>Register</button>
+                        <button className="btn btn-primary mt-3" onClick = {registerClickHandler}>Register</button>
+                    </fieldset>
 
                 </form>
             </div>

@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import 'bootswatch/dist/yeti/bootstrap.min.css';
 import "./tileForm.css";
 
 function TileForm(props){
@@ -44,36 +45,42 @@ function TileForm(props){
     if(props.show){
         Content = (
             <div className = "Backdrop">
-                <div className = "tileForm">
-                <img src={props.data.imageUrl} alt={props.data.name} className = "tileForm-img"/>
-                <div>
-                    <h3>{title}</h3>
-                    <table>
-                            <tbody>
-                                <tr>
-                                    <th>Calories</th>
-                                    <th>{props.data.caloriesPer100g} cal</th>
-                                    <td></td>
-                                    <th>Fats</th>
-                                    <th>{props.data.fatsPer100g} g</th>
-                                </tr>
-                                <tr>
-                                    <th>Carbs</th>
-                                    <th>{props.data.carbsPer100g} g</th>
-                                    <td></td>
-                                    <th>Proteins</th>
-                                    <th>{props.data.proteinsPer100g} g</th>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div className = "card text-white bg-primary mb-3 tile-form-consumed">
+                    <h3 className="card-header">{title}</h3>
+                    <div className="body-card">
+                        <div className="tile-image-div" >
+                            <img src={props.data.imageUrl} alt={props.data.name} className = "tile-img"/>
+                        </div>
+                        <div className="tile-table-container">
+                            <table className="table table-hover tile-table">
+                                    <tbody>
+                                        <tr>
+                                            <th>Calories</th>
+                                            <th>{props.data.caloriesPer100g} cal</th>
+                                            <td></td>
+                                            <th>Fats</th>
+                                            <th>{props.data.fatsPer100g} g</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Carbs</th>
+                                            <th>{props.data.carbsPer100g} g</th>
+                                            <td></td>
+                                            <th>Proteins</th>
+                                            <th>{props.data.proteinsPer100g} g</th>
+                                        </tr>
+                                    </tbody>
+                            </table>
+                            <form action="/consumed" method="POST" className="consumed-form">
+                                <p>Amount consumed:</p>
+                                <input type="number" name="quantity" value = {quantity} onChange = {quantityChangeHandler} className="form-control" />
+                                <input type="button" className="btn btn-primary mt-3" onClick = {submitClickHandler} value = "Submit" />
+                                <input type="button" className="btn btn-primary ml-3 mt-3" onClick = {cancelClickHandler} value = "Cancel" />
+                            </form>
+                        </div>
                     </div>
+                    
                 </div>
-                <form action="/consumed" method="POST" className="tileForm">
-                        <p>Amount consumed:</p>
-                        <input type="number" name="quantity" value = {quantity} onChange = {quantityChangeHandler} />
-                        <input type="button" className="button" onClick = {submitClickHandler} value = "Submit" />
-                        <input type="button" className="button" onClick = {cancelClickHandler} value = "Cancel" />
-                    </form>
+                    
             </div>
         );
     }

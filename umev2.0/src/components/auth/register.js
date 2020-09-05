@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import 'bootswatch/dist/yeti/bootstrap.min.css';
 import "./login.css";
 import { withRouter } from 'react-router-dom';
 
@@ -62,15 +63,17 @@ function Register(props){
     return(
        <div>
 
-           <div className = "LoginDiv">
+           <div className = "container mt-3">
                <form action = "/register" method = "POST" >
-                   <h3>Let's sign you up!</h3>
-                   <label>User name - something that you will be using to login</label>
-                   <input type = "text" placeholder = "User name" className = "loginInput" name = "username" value = {username} onChange ={changeHandler} ></input>
-                   <label>Password</label>
-                   <input type = "password" placeholder = "Password" className = "loginInput" name = "password" value = {password} onChange ={changeHandler} ></input>
-                   {errorMessage}
-                   <button type = "submit" className = "loginBtn" onClick = {submitClickHandler} >Register</button>
+                   <fieldset>
+                        <legend>Let's sign you up!</legend>
+                        <label className="col-form-label">User name - something that you will be using to login</label>
+                        <input type = "text" placeholder = "User name" className = "form-control" name = "username" value = {username} onChange ={changeHandler} ></input>
+                        <label className="col-form-label">Password</label>
+                        <input type = "password" placeholder = "Password" className = "form-control" name = "password" value = {password} onChange ={changeHandler} ></input>
+                        {errorMessage}
+                        <button type = "submit" className = "btn btn-primary mt-3" onClick = {submitClickHandler} >Register</button>
+                   </fieldset>
                </form>
            </div>
            

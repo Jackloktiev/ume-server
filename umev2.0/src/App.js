@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import 'bootswatch/dist/yeti/bootstrap.min.css';
 import './App.css';
 import MainContent from "./components/containers/mainContent";
 import Header from "./components/other/header";
@@ -61,7 +62,7 @@ function App() {
     <>
       <BrowserRouter>
         <Header />
-        <div className="Chart">
+        <div>
           <Switch>
             <Route path="/" component={Welcome} exact />
             <Route path="/login" render={()=><Login tokenTransfer={getToken}/>} />

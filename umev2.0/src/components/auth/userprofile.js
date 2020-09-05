@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { withRouter } from 'react-router-dom';
 import Menu from "../menu/menu";
+import 'bootswatch/dist/yeti/bootstrap.min.css';
 import "./userProfile.css";
 
 function UserProfile(props){
@@ -63,25 +64,25 @@ function UserProfile(props){
        <div>
            <div className = "setUserData">
                <Menu/>
-               <form action = "/userProfile" method = "POST" >
-                   <h3 className="caption">We need your body parameters to define your consumption norms</h3>
+               <form action = "/userProfile" method = "POST" className="userdata-form">
+                   <legend>We need your body parameters to define your consumption norms.</legend>
                    <label className="label">Gender:</label>
-                   <select className = "selectInp" name = "gender" value = {gender} onChange={changeHandler} >
+                   <select className = "form-control" name = "gender" value = {gender} onChange={changeHandler} >
                        <option value = "male" >Male</option>
                        <option value = "female" >Female</option>
                    </select>
                    <br></br>
                    <label className="label">Age in years:</label>
-                   <input type = "text" className = "profileInput" name = "age" value = {age} onChange={changeHandler} ></input>
+                   <input type = "text" className = "form-control" name = "age" value = {age} onChange={changeHandler} ></input>
                    <br></br>
                    <label className="label">Height in cm:</label>
-                   <input type = "text" className = "profileInput" name = "height" value = {height} onChange={changeHandler} ></input>
+                   <input type = "text" className = "form-control" name = "height" value = {height} onChange={changeHandler} ></input>
                    <br></br>
                    <label className="label">Weight in kg:</label>
-                   <input type = "text" className = "profileInput" name = "weight" value = {weight} onChange={changeHandler} ></input>
+                   <input type = "text" className = "form-control" name = "weight" value = {weight} onChange={changeHandler} ></input>
                    <br></br>
                    <label className="label">What is your level of activity:</label>
-                   <select className = "selectInp" name = "activity" value = {activity} onChange={changeHandler} >
+                   <select className = "form-control" name = "activity" value = {activity} onChange={changeHandler} >
                        <option value = "low" >Low</option>
                        <option value = "moderate" >Moderate</option>
                        <option value = "average" >Average</option>
@@ -89,7 +90,7 @@ function UserProfile(props){
                        <option value = "sport" >Sport</option>
                    </select>
                    <br></br>
-                   <button type = "submit" className = "profileBtn" onClick = {submitClickHandler} >Update profile</button>
+                   <button type = "submit" className = "btn btn-primary" onClick = {submitClickHandler} >Update profile</button>
                </form>
            </div>
        </div>
