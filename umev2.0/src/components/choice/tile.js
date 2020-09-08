@@ -9,14 +9,18 @@ function Tile(props) {
         props.click(props.itemId);
     }
     const title = props.name.charAt(0).toUpperCase() + props.name.slice(1);
+    let dots = "";
+    if(title.length>22){
+        dots="...";
+    }
     return (
         <div className = "card text-white bg-primary mb-3 tile" onClick = {clickHandler}>
-            <h3 className="card-header">{title}</h3>
-            <div className = "card-body">
+            <h3 className="card-header">{title.substr(0,22)+dots}</h3>
+            <div className = "card-body body-card">
                 <div className="tile-image-div" >
                     <img src = {props.imgUrl} alt={props.name} className = "tile-img" />
                 </div>
-                <div className="body-card">
+                <div className="tile-table-container">
                     <table className="table table-hover tile-table">
                             <tbody>
                                 <tr>

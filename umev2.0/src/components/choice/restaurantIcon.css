@@ -4,3 +4,11 @@
     margin: 2px;
 
 }
+
+@media only screen and (max-width: 400px) {
+    .LogoImg{
+        width: 50px;
+    
+    }
+
+}

@@ -66,23 +66,23 @@ function UserProfile(props){
                <Menu/>
                <form action = "/userProfile" method = "POST" className="userdata-form">
                    <legend>We need your body parameters to define your consumption norms.</legend>
-                   <label className="label">Gender:</label>
-                   <select className = "form-control" name = "gender" value = {gender} onChange={changeHandler} >
+                   <label className="label text-label">Gender:</label>
+                   <select className = "form-control text-input" name = "gender" value = {gender} onChange={changeHandler} >
                        <option value = "male" >Male</option>
                        <option value = "female" >Female</option>
                    </select>
                    <br></br>
-                   <label className="label">Age in years:</label>
-                   <input type = "text" className = "form-control" name = "age" value = {age} onChange={changeHandler} ></input>
+                   <label className="label text-label">Age in years:</label>
+                   <input type = "text" className = "form-control text-input" name = "age" value = {age} onChange={changeHandler} ></input>
                    <br></br>
-                   <label className="label">Height in cm:</label>
-                   <input type = "text" className = "form-control" name = "height" value = {height} onChange={changeHandler} ></input>
+                   <label className="label text-label">Height in cm:</label>
+                   <input type = "text" className = "form-control text-input" name = "height" value = {height} onChange={changeHandler} ></input>
                    <br></br>
-                   <label className="label">Weight in kg:</label>
-                   <input type = "text" className = "form-control" name = "weight" value = {weight} onChange={changeHandler} ></input>
+                   <label className="label text-label">Weight in kg:</label>
+                   <input type = "text" className = "form-control text-input" name = "weight" value = {weight} onChange={changeHandler} ></input>
                    <br></br>
-                   <label className="label">What is your level of activity:</label>
-                   <select className = "form-control" name = "activity" value = {activity} onChange={changeHandler} >
+                   <label className="label text-label">What is your level of activity:</label>
+                   <select className = "form-control text-input" name = "activity" value = {activity} onChange={changeHandler} >
                        <option value = "low" >Low</option>
                        <option value = "moderate" >Moderate</option>
                        <option value = "average" >Average</option>

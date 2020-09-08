@@ -12,18 +12,62 @@
 }
 
 .tile-image-div{
-  width: 25%;
+  width: 30%;
+}
+
+.body-card{
+  display: flex;
+  flex-direction: row;
 }
 
 .tile-table{
-  width: 75%;
+  width: 100%;
   margin-top: 7px;
   color: #ffffff;
   font: inherit;
+  
+}
+.tile-table-container{
+  width: 70%;
 }
 
 @media only screen and (max-width: 1360px) {
   .tile-image-div{
-    width: 15%;
+    width: 100%;
+    text-align: center;
+  }
+
+  .tile-img{
+    width: 40%;
+  }
+
+  .tile-table{
+    width: 100%;
+  }
+
+  .body-card{
+    display: flex;
+    flex-direction: column;
+  }
+  .tile-table-container{
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .tile-table{
+    font-size: 75%;
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .tile-table{
+    font-size: 65%;
+    width: 100%;
+    
+  }
+  .table th, .table td {
+    padding: 0.4rem !important;
   }
 }

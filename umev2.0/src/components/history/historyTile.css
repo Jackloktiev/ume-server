@@ -6,13 +6,6 @@
     color: white;
     border-radius: 7px;
     padding: 1%;
-  }
-
-.tile-img{
-  width: 150px;
-  height: auto;
-  margin:7px;
-  float: left;
 }
 
 td {
@@ -29,4 +22,13 @@ table {
   color: #4d80e4;
   margin-left: 1%;
   display: inline-block;
+}
+
+@media only screen and (max-width: 700px) {
+  .history-table{
+    font-size: 0.7rem;
+  }
+  .history-table th, .history-table td{
+    padding: 0.2rem;
+  }
 }

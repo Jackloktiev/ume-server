@@ -17,7 +17,7 @@ function HistoryTile(props) {
             <h3 className="card-header">{title}</h3>
             <div className = "card-body">
                 <div>
-                    <table className="table table-hover tile-table">
+                    <table className="table table-hover history-table">
                         <tbody>
                             <tr>
                                 <th>Calories total:</th>

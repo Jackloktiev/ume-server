@@ -47,12 +47,12 @@ function TileForm(props){
             <div className = "Backdrop">
                 <div className = "card text-white bg-primary mb-3 tile-form-consumed">
                     <h3 className="card-header">{title}</h3>
-                    <div className="body-card">
-                        <div className="tile-image-div" >
-                            <img src={props.data.imageUrl} alt={props.data.name} className = "tile-img"/>
+                    <div className="body-card-form">
+                        <div className="tile-image-div-form" >
+                            <img src={props.data.imageUrl} alt={props.data.name} className = "tile-img-form"/>
                         </div>
-                        <div className="tile-table-container">
-                            <table className="table table-hover tile-table">
+                        <div className="tile-table-container-form">
+                            <table className="table table-hover tile-table-form">
                                     <tbody>
                                         <tr>
                                             <th>Calories</th>
