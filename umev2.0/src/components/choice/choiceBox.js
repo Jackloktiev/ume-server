@@ -68,14 +68,14 @@ function ChoiceBox(props) {
     const SearchHandler = (event) => {
         const dataCopy1 = [...data]; //not touching original state (make a shallow copy)
         const dataCopy2 = [...dataBackup]; //not touching original state (make a shallow copy)
-        const currentSearchWord = event.target.value;
+        const currentSearchWord = event.target.value.charAt(0).toUpperCase()+event.target.value.slice(1);
         let filteredData = [];
 
         if (currentSearchWord.length > searchLength) {
-            filteredData = dataCopy1.filter(item => item.name.includes(event.target.value));
+            filteredData = dataCopy1.filter(item => item.name.includes(currentSearchWord));
             setSearchLength(currentSearchWord.length);
         } else {
-            filteredData = dataCopy2.filter(item => item.name.includes(event.target.value));
+            filteredData = dataCopy2.filter(item => item.name.includes(currentSearchWord));
             setSearchLength(currentSearchWord.length);
         }
 

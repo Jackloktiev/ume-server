@@ -9,7 +9,7 @@ const path = require('path');
 
 const MealsData = require("./testContent");
 const RestData = require("./testRestaurants");
-const bigData = require("./starbucksData.json");
+const bigData = require("./mcdonaldsData.json");
 
 
 //Ctrs+Shift+[ to collapse the code and Ctrl+Shift+] to unfold
